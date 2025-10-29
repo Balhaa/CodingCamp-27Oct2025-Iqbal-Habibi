@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iqbal To-Do List</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="floating-background">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <span>Iqbal To-Do List</span>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-tasks">0</div>
+                    <div class="stat-label">TOTAL TASKS</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completed-tasks">0</div>
+                    <div class="stat-label">COMPLETED</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pending-tasks">0</div>
+                    <div class="stat-label">PENDING</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="progress-tasks">0</div>
+                    <div class="stat-label">IN PROGRESS</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="add-todo-form">
+                <h2><i class="fas fa-plus-circle"></i> add new task disini</h2>
+                <form id="todo-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="task-name"><i class="fas fa-tasks"></i> Task Name</label>
+                            <input type="text" id="task-name" placeholder="What needs to be done?" required>
+                            <span class="error-message" id="name-error"></span>
+                        </div>
+                        <div class="input-group">
+                            <label for="due-date"><i class="fas fa-calendar-alt"></i> Due Date</label>
+                            <input type="date" id="due-date" required>
+                            <span class="error-message" id="date-error"></span>
+                        </div>
+                        <div class="input-group">
+                            <label for="status"><i class="fas fa-flag"></i> Status</label>
+                            <select id="status">
+                                <option value="pending">⏳ Pending</option>
+                                <option value="progress">🚧 In Progress</option>
+                                <option value="completed">✅ Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Task
+                    </button>
+                </form>
+            </div>
+
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search tasks... (Ctrl+F)">
+                </div>
+                <div class="sort-filter">
+                    <select id="sort-by" class="btn-outline">
+                        <option value="name">📝 Sort by Name</option>
+                        <option value="date">📅 Sort by Date</option>
+                        <option value="status">🏷️ Sort by Status</option>
+                    </select>
+                    <select id="filter-by" class="btn-outline">
+                        <option value="all">📋 All Tasks</option>
+                        <option value="pending">⏳ Pending</option>
+                        <option value="progress">🚧 In Progress</option>
+                        <option value="completed">✅ Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="todo-list">
+                <div class="todo-header">
+                    <div><i class="fas fa-tasks"></i> NAME</div>
+                    <div><i class="fas fa-calendar"></i> DUE DATE</div>
+                    <div><i class="fas fa-flag"></i> STATUS</div>
+                    <div><i class="fas fa-cog"></i> ACTIONS</div>
+                </div>
+                <div class="todo-items" id="todo-items">
+                    <div class="empty-state">
+                        <div class="empty-animation">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3>No task found</h3>
+                        <p>Add a new task to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with <i class="fas fa-heart"></i> by Iqbal Habibi</p>
+        </footer>
+    </div>
+
+    <!-- Confetti Effect -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
