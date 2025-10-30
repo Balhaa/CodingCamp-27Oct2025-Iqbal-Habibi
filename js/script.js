@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressTasksElement = document.getElementById('progress-tasks');
     const nameErrorElement = document.getElementById('name-error');
     const dateErrorElement = document.getElementById('date-error');
+    const charCountElement = document.getElementById('char-count');
+    const currentTimeElement = document.getElementById('current-time');
+    const currentDateElement = document.getElementById('current-date');
     
     // Confetti setup
     const confettiCanvas = document.getElementById('confetti-canvas');
@@ -25,13 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
     dueDateInput.min = today;
     
-    // Load tasks from localStorage - JANGAN PAKAI TASK BAWAAN LAGI
+    // Load tasks from localStorage - TANPA TASK BAWAAN
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     
     // Initialize the app
     function init() {
         renderTasks();
         updateStats();
+        startClock(); // Start digital clock
+        setupCharacterCounter(); // Setup character counter
         
         // Add event listeners
         todoForm.addEventListener('submit', addTask);
@@ -56,6 +61,64 @@ document.addEventListener('DOMContentLoaded', function() {
             confettiCanvas.width = window.innerWidth;
             confettiCanvas.height = window.innerHeight;
         });
+    }
+    
+    // Digital Clock Function
+    function startClock() {
+        function updateClock() {
+            const now = new Date();
+            
+            // Format time
+            const time = now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            // Format date
+            const date = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            // Add animation
+            currentTimeElement.classList.add('time-updating');
+            setTimeout(() => {
+                currentTimeElement.classList.remove('time-updating');
+            }, 1000);
+            
+            currentTimeElement.textContent = time;
+            currentDateElement.textContent = date;
+        }
+        
+        // Update immediately and then every second
+        updateClock();
+        setInterval(updateClock, 1000);
+    }
+    
+    // Character Counter Setup
+    function setupCharacterCounter() {
+        function updateCharCounter() {
+            const length = taskNameInput.value.length;
+            charCountElement.textContent = length;
+            
+            // Update counter color based on length
+            if (length >= 90) {
+                charCountElement.parentElement.classList.add('danger');
+                charCountElement.parentElement.classList.remove('warning');
+            } else if (length >= 70) {
+                charCountElement.parentElement.classList.add('warning');
+                charCountElement.parentElement.classList.remove('danger');
+            } else {
+                charCountElement.parentElement.classList.remove('warning', 'danger');
+            }
+        }
+        
+        taskNameInput.addEventListener('input', updateCharCounter);
+        updateCharCounter(); // Initialize counter
     }
     
     // Validate task name
@@ -133,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dueDateInput.min = today;
         nameErrorElement.textContent = '';
         dateErrorElement.textContent = '';
+        setupCharacterCounter(); // Reset character counter
         
         // Show success animation
         const addButton = todoForm.querySelector('.btn-primary');
@@ -177,6 +241,9 @@ document.addEventListener('DOMContentLoaded', function() {
             taskNameInput.value = task.name;
             dueDateInput.value = task.dueDate;
             statusSelect.value = task.status;
+            
+            // Update character counter
+            setupCharacterCounter();
             
             // Remove the task from the list
             tasks = tasks.filter(t => t.id !== id);
@@ -223,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Render tasks to the DOM
+    // Render tasks to the DOM - DIPERBAIKI untuk handle teks panjang
     function renderTasks() {
         if (tasks.length === 0) {
             todoItemsContainer.innerHTML = `
@@ -280,12 +347,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Render tasks
+        // Render tasks dengan handling teks panjang
         todoItemsContainer.innerHTML = filteredTasks.map(task => `
             <div class="todo-item status-${task.status}" data-task-id="${task.id}">
                 <div class="task-name">
                     <i class="fas fa-tasks"></i>
-                    <span>${task.name}</span>
+                    <div class="task-name-content" title="${task.name}">${task.name}</div>
                 </div>
                 <div class="due-date">${formatDate(task.dueDate)}</div>
                 <div class="status status-${task.status}">
@@ -307,15 +374,13 @@ document.addEventListener('DOMContentLoaded', function() {
         `).join('');
     }
     
-    // Update statistics - DIPERBAIKI untuk sinkronisasi yang benar
+    // Update statistics
     function updateStats() {
         const total = tasks.length;
         const completed = tasks.filter(task => task.status === 'completed').length;
         const pending = tasks.filter(task => task.status === 'pending').length;
         const progress = tasks.filter(task => task.status === 'progress').length;
         
-        // Update elements directly tanpa animasi counter yang kompleks
-        // untuk memastikan sinkronisasi yang tepat
         totalTasksElement.textContent = total;
         completedTasksElement.textContent = completed;
         pendingTasksElement.textContent = pending;
@@ -338,11 +403,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return new Date(dateString).toLocaleDateString('en-US', options);
     }
     
-    // Save tasks to localStorage - DIPASTIKAN BERFUNGSI
+    // Save tasks to localStorage
     function saveToLocalStorage() {
         try {
             localStorage.setItem('tasks', JSON.stringify(tasks));
-            console.log('Tasks saved to localStorage:', tasks.length, 'tasks');
         } catch (error) {
             console.error('Error saving to localStorage:', error);
         }

@@ -19,11 +19,17 @@
 
     <div class="container">
         <header>
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-check-double"></i>
+            <div class="header-top">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <span>Iqbal To-Do List</span>
                 </div>
-                <span>Iqbal To-Do List</span>
+                <div class="digital-clock">
+                    <div class="time" id="current-time">00:00:00</div>
+                    <div class="date" id="current-date">Loading...</div>
+                </div>
             </div>
             <div class="stats">
                 <div class="stat-card">
@@ -47,12 +53,16 @@
 
         <div class="main-content">
             <div class="add-todo-form">
-                <h2><i class="fas fa-plus-circle"></i> tambahkan task disini</h2>
+                <h2><i class="fas fa-plus-circle"></i> Tambahkan Task Disini</h2>
                 <form id="todo-form">
                     <div class="form-group">
                         <div class="input-group">
                             <label for="task-name"><i class="fas fa-tasks"></i> Task Name</label>
-                            <input type="text" id="task-name" placeholder="What needs to be done?" required>
+                            <input type="text" id="task-name" placeholder="What needs to be done?" required
+                                maxlength="100">
+                            <div class="char-counter">
+                                <span id="char-count">0</span>/100 characters
+                            </div>
                             <span class="error-message" id="name-error"></span>
                         </div>
                         <div class="input-group">

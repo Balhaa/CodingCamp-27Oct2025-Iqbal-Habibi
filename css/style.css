@@ -127,7 +127,6 @@ header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     padding: 30px;
-    text-align: center;
     position: relative;
     overflow: hidden;
 }
@@ -143,15 +142,21 @@ header::before {
     background-size: cover;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
 .logo {
     font-size: 2.5rem;
     font-weight: 800;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 15px;
-    margin-bottom: 20px;
-    position: relative;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -178,11 +183,36 @@ header::before {
     }
 }
 
+/* Digital Clock Styles */
+.digital-clock {
+    text-align: right;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 160px;
+}
+
+.time {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 5px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.date {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
 .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
-    margin-top: 20px;
     position: relative;
 }
 
@@ -297,6 +327,24 @@ header::before {
     font-weight: 600;
     color: var(--dark);
     font-size: 0.95rem;
+}
+
+/* Character Counter */
+.char-counter {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.char-counter.warning {
+    color: var(--warning);
+}
+
+.char-counter.danger {
+    color: var(--danger);
+    font-weight: 600;
 }
 
 input,
@@ -509,14 +557,31 @@ select:focus {
 .task-name {
     font-weight: 500;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     font-size: 1rem;
+    line-height: 1.4;
+    min-height: 44px;
+    align-items: center;
+}
+
+.task-name-content {
+    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-height: 60px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .task-name i {
     color: var(--primary);
     font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .due-date {
@@ -718,8 +783,31 @@ footer .fa-heart {
     animation: taskComplete 0.6s ease;
 }
 
+/* Clock animation */
+@keyframes timePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.time-updating {
+    animation: timePulse 1s ease;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+    .header-top {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
     .logo {
         font-size: 2rem;
     }
@@ -727,6 +815,13 @@ footer .fa-heart {
     .logo-icon {
         width: 50px;
         height: 50px;
+    }
+
+    .digital-clock {
+        text-align: center;
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
     }
 
     .todo-header,
@@ -783,5 +878,17 @@ footer .fa-heart {
         font-size: 1.5rem;
         flex-direction: column;
         gap: 10px;
+    }
+
+    .digital-clock {
+        min-width: 140px;
+    }
+
+    .time {
+        font-size: 1.2rem;
+    }
+
+    .date {
+        font-size: 0.8rem;
     }
 }
